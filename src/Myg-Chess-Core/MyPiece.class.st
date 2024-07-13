@@ -5,8 +5,8 @@ Class {
 		'color',
 		'square'
 	],
-	#category : 'Myg-Chess',
-	#package : 'Myg-Chess'
+	#category : 'Myg-Chess-Core',
+	#package : 'Myg-Chess-Core'
 }
 
 { #category : 'constants' }

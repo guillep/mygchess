@@ -10,8 +10,8 @@ Class {
 		'board',
 		'target'
 	],
-	#category : 'Myg-Chess',
-	#package : 'Myg-Chess'
+	#category : 'Myg-Chess-Core',
+	#package : 'Myg-Chess-Core'
 }
 
 { #category : 'api - text weight' }

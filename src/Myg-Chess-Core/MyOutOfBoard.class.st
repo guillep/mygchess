@@ -1,8 +1,8 @@
 Class {
 	#name : 'MyOutOfBoard',
 	#superclass : 'Object',
-	#category : 'Myg-Chess',
-	#package : 'Myg-Chess'
+	#category : 'Myg-Chess-Core',
+	#package : 'Myg-Chess-Core'
 }
 
 { #category : 'api - configuration' }
