@@ -6,7 +6,6 @@ Class {
 		'grid',
 		'selected',
 		'state',
-		'dsp',
 		'whiteColor',
 		'blackColor',
 		'game'
@@ -14,6 +13,12 @@ Class {
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
 }
+
+{ #category : 'instance creation' }
+MyChessBoard class >> empty [
+
+	^ super new
+]
 
 { #category : 'instance creation' }
 MyChessBoard class >> fromFENBoard: aFENBoard [
@@ -94,7 +99,6 @@ MyChessBoard >> initialize [
 	self blackColor: Color blue.
 	self whiteColor: Color orange.
 
-	self initializeSound.
 	state := MyUnselectedState board: self.
 	grid := Dictionary new.
 
@@ -182,17 +186,6 @@ MyChessBoard >> initializePieces [
 ]
 
 { #category : 'initialization' }
-MyChessBoard >> initializeSound [
-
-	| clap |
-	clap := Marimba new strikeSharpness: 4.
-	dsp := clap asDsp.
-	dsp init.
-
-	dsp start
-]
-
-{ #category : 'initialization' }
 MyChessBoard >> initializeSquares [
 
 	| black |
@@ -238,12 +231,6 @@ MyChessBoard >> select: aSquare [
 MyChessBoard >> selected: aMyChessSquare [ 
 	
 	selected := aMyChessSquare
-]
-
-{ #category : 'initialization' }
-MyChessBoard >> toc [
-
-	dsp trig: 'MarimbaGate'
 ]
 
 { #category : 'highlighting' }
