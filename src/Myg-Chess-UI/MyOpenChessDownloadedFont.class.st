@@ -6,9 +6,8 @@ Thee the `baseUrl`.
 Class {
 	#name : 'MyOpenChessDownloadedFont',
 	#superclass : 'AeDownloadedFont',
-	#category : 'Myg-Chess-Core-Downloaded',
-	#package : 'Myg-Chess-Core',
-	#tag : 'Downloaded'
+	#category : 'Myg-Chess-UI',
+	#package : 'Myg-Chess-UI'
 }
 
 { #category : 'accessing' }

@@ -19,14 +19,12 @@ Class {
 		'currentPlayer',
 		'whitePlayer',
 		'blackPlayer',
-		'moveCount',
 		'movesLabel',
-		'moveCountLabel',
 		'moves',
 		'dsp'
 	],
-	#category : 'Myg-Chess-Core',
-	#package : 'Myg-Chess-Core'
+	#category : 'Myg-Chess-UI',
+	#package : 'Myg-Chess-UI'
 }
 
 { #category : 'instance creation' }
@@ -60,10 +58,9 @@ MyChessGame >> checkForMate [
 MyChessGame >> initialize [
 
 	super initialize.
-	self initializeSound.
 	self initializeFonts.
 
-	moves := OrderedCollection new.
+	moves := MyMoveList new.
 	whitePlayer := MyPlayer new white game: self.
 	blackPlayer := MyPlayer new black game: self
 ]
@@ -92,24 +89,24 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 	aFENGame sideToMove = 'White'
 		ifTrue: [ currentPlayer := whitePlayer ]
 		ifFalse: [ currentPlayer := blackPlayer ].
-		
-	moveCount := aFENGame moveCount.
+
+	moves initialMoveAt: aFENGame moveCount.
 
 	board := MyChessBoard fromFENBoard: aFENGame board.
 	board game: self.
 	button := ToButton new.
 	button labelText: 'Play!'.
 	button whenClickedDo: [ self play ].
-	
+
 	infoPane := ToElement new.
-	infoPane constraintsDo: [ :c | 
-		        c vertical fitContent.
-		        c horizontal matchParent ].
+	infoPane constraintsDo: [ :c |
+		c vertical fitContent.
+		c horizontal matchParent ].
 	infoPane layout: BlLinearLayout vertical.
 	infoPane layout cellSpacing: 10.
 	infoPane margin: (BlInsets all: 20).
 	infoPane matchParent.
-	
+
 	movesLabel := ToLabel new beMultiLine.
 	movesLabel matchParent.
 
@@ -125,22 +122,10 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 ]
 
 { #category : 'public' }
-MyChessGame >> initializeSound [
-
-	| clap |
-	clap := Marimba new strikeSharpness: 4.
-	dsp := clap asDsp.
-	dsp init.
-
-	dsp start
-]
-
-{ #category : 'public' }
 MyChessGame >> move: piece to: square [
 
 	piece moveTo: square.
 	self recordMovementOf: piece to: square.
-	self toc
 ]
 
 { #category : 'accessing' }
@@ -155,9 +140,7 @@ MyChessGame >> play [
 	currentPlayer play.
 	currentPlayer = whitePlayer
 		ifTrue: [ currentPlayer := blackPlayer ]
-		ifFalse: [ 
-			moveCount := moveCount + 1.
-			currentPlayer := whitePlayer ].
+		ifFalse: [ currentPlayer := whitePlayer ].
 	self checkForMate
 ]
 
@@ -165,31 +148,14 @@ MyChessGame >> play [
 MyChessGame >> recordMovementOf: aPiece to: aSquare [
 	"moves add: (MyMove piece: aPiece square: aSquare name)."
 
-	| prefix movesText |
-	prefix := currentPlayer isWhite
-		          ifTrue: [ moveCount asString , '.' ]
-		          ifFalse: [ '' ].
-	moves add: prefix , ' ' , aPiece id , aSquare name.
-	
+	| movesText sanNotationMoveText |
+	sanNotationMoveText := aPiece id , aSquare name.
+	moves addSANMoveText: sanNotationMoveText.
+
 	movesText := String streamContents: [ :stream |
-		| currentLine |
-		currentLine := ''.
-		moves do: [ :m |
-			currentLine := currentLine, ' ', m.
-			currentLine size > 20 ifTrue: [ 
-				stream nextPutAll: currentLine.
-				stream cr.
-				currentLine := ''.
-			]
-		].
-		stream nextPutAll: currentLine
-	].
-	
+		             moves movesDo: [ :m |
+			             stream nextPutAll: m displayString.
+			             stream cr ] ].
+
 	movesLabel text: movesText
-]
-
-{ #category : 'initialization' }
-MyChessGame >> toc [
-
-	dsp trig: 'MarimbaGate'
 ]
