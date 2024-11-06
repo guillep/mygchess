@@ -8,7 +8,8 @@ Class {
 { #category : 'accessing' }
 MyPawn >> id [
 
-	^ 'P'
+	"An empty string? :)"
+	^ ''
 ]
 
 { #category : 'rendering' }
